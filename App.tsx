@@ -1,76 +1,29 @@
-import React, { useState } from 'react';
-import { Header } from './components/Header';
-import { UrlInputForm } from './components/UrlInputForm';
-import { ResultsDisplay } from './components/ResultsDisplay';
-import { analyzeUrlHeaders } from './services/geminiService';
-import { AnalysisResult } from './types';
-import { LanguageSwitcher } from './components/LanguageSwitcher';
-import { SeoContent } from './components/SeoContent';
+import React from 'react';
+import MainPage from './MainPage';
 
 function App() {
-  const [url, setUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-  const [headerToFocus, setHeaderToFocus] = useState<string | null>(null);
+  // Simple router logic based on the browser's path
+  const path = window.location.pathname;
 
+  // Handle the case where the file is accessed directly
+  if (path.endsWith('index.html')) {
+    return <MainPage key="nl" lang="nl" />;
+  }
 
-  const handleAnalyze = async () => {
-    if (!url) return;
-    setIsLoading(true);
-    setAnalysisResult(null);
-
-    try {
-      const formattedUrl = url.startsWith('http') ? url : `https://${url}`;
-      const headerResults = await analyzeUrlHeaders(formattedUrl);
-      
-      setAnalysisResult({
-        url: formattedUrl,
-        headers: headerResults,
-      });
-
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Een onbekende fout is opgetreden.';
-      setAnalysisResult({
-        url: url,
-        headers: [],
-        error: `Analyse mislukt. Zorg ervoor dat de URL correct is. Fout: ${errorMessage}`
-      });
-      console.error('Analysis failed:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleFocusHeader = (header: string) => {
-    setHeaderToFocus(header);
-  };
-
-  return (
-    <div className="bg-dark-bg min-h-screen text-dark-text font-sans p-4 sm:p-12">
-      <div className="max-w-5xl mx-auto">
-        <Header />
-        <LanguageSwitcher />
-        <main>
-          <UrlInputForm
-            url={url}
-            setUrl={setUrl}
-            onAnalyze={handleAnalyze}
-            isLoading={isLoading}
-          />
-          {analysisResult && (
-            <ResultsDisplay 
-              result={analysisResult} 
-              onFocusHeader={handleFocusHeader}
-            />
-          )}
-        </main>
-        <SeoContent 
-          headerToFocus={headerToFocus}
-          setHeaderToFocus={setHeaderToFocus}
-        />
-      </div>
-    </div>
-  );
+  switch (path) {
+    case '/en':
+      return <MainPage key="en" lang="en" />;
+    case '/de':
+      return <MainPage key="de" lang="de" />;
+    case '/fr':
+      return <MainPage key="fr" lang="fr" />;
+    case '/es':
+      return <MainPage key="es" lang="es" />;
+    case '/':
+    default:
+      // Default to Dutch for the root path or any unknown path
+      return <MainPage key="nl" lang="nl" />;
+  }
 }
 
 export default App;

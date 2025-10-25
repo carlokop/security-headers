@@ -5,13 +5,15 @@ import { HeaderResult } from '../types';
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const analyzeUrlHeaders = async (url: string): Promise<HeaderResult[]> => {
-    const prompt = `Je bent een security header analyse tool. Voer een real-time HTTP-verzoek uit naar de URL "${url}" en rapporteer de exacte waarden van de security headers.
-- Voer een live fetch uit. Gebruik geen gecachte data.
-- Je MOET de aanwezigheid en waarde rapporteren van elke header in deze lijst: ${HEADERS_TO_CHECK.join(', ')}.
-- Zelfs als een header verouderd is (zoals X-XSS-Protection), MOET je rapporteren of deze aanwezig is in de responsheaders. Oordeel niet over de effectiviteit, rapporteer alleen de feiten.
-- Als een headerwaarde erg lang is (zoals Content-Security-Policy), MOET je de volledige, niet-ingekorte waarde retourneren.
+    const prompt = `You are an automated HTTP header fetcher, a 'data retrieval bot'. Your task is to retrieve the raw, unmodified header values from the URL "${url}".
 
-Retourneer een enkel JSON-object dat strikt voldoet aan het opgegeven schema. Dit object moet een sleutel bevatten voor elke header in de lijst.`;
+**Strict Rules:**
+1.  **NO INTERPRETATION:** You must NOT interpret, summarize, shorten, or analyze the values. Only report the literal, exact string value as it appears in the HTTP response. Behave like a 'curl' command.
+2.  **COMPLETE VALUES:** For the 'Content-Security-Policy' header, it is crucial that you return the *full, 100% complete, unmodified* value, no matter how long it is. This is the most important rule.
+3.  **REPORT EVERYTHING:** Report the status of EVERY header in the list: ${HEADERS_TO_CHECK.join(', ')}. ALSO report the presence of obsolete headers like 'X-XSS-Protection' if they are present in the response.
+4.  **LIVE FETCH:** Perform a live, real-time fetch. Do not use cached data.
+
+Return a single JSON object that strictly adheres to the provided schema.`;
 
     const properties = HEADERS_TO_CHECK.reduce((acc, header) => {
         acc[header] = {
@@ -27,7 +29,7 @@ Retourneer een enkel JSON-object dat strikt voldoet aan het opgegeven schema. Di
 
     try {
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-pro', // Switched to the more powerful model for accuracy
+            model: 'gemini-2.5-pro',
             contents: prompt,
             config: {
                 temperature: 0,
@@ -58,6 +60,6 @@ Retourneer een enkel JSON-object dat strikt voldoet aan het opgegeven schema. Di
         return finalResults;
     } catch (error) {
         console.error('Error analyzing headers with Gemini API:', error);
-        throw new Error('De analyse via de AI-service is mislukt.');
+        throw new Error('Analysis via the AI service failed.');
     }
 };

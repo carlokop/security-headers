@@ -1,14 +1,17 @@
-
 import React from 'react';
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+    t: (key: string) => string;
+}
+
+export const Header: React.FC<HeaderProps> = ({ t }) => {
     return (
         <header className="text-center mb-8">
             <h1 className="text-4xl sm:text-5xl font-bold text-brand-secondary">
-                Security Header Analyse
+                {t('header.title')}
             </h1>
             <p className="mt-2 text-lg text-dark-text-secondary">
-                Controleer de beveiliging van elke website
+                {t('header.subtitle')}
             </p>
         </header>
     );
