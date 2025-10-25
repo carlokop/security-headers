@@ -1,0 +1,5 @@
+{
+  "name": "Security Header Analyser",
+  "description": "An application to analyze the security headers of a website. Enter a URL and the app will report on the presence and values of key security headers. It also provides AI-powered explanations for each header.",
+  "requestFramePermissions": []
+}
