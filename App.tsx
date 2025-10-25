@@ -61,8 +61,8 @@ function App() {
   }
 
   return (
-    <div className="bg-dark-bg min-h-screen text-dark-text font-sans p-4 sm:p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="bg-dark-bg min-h-screen text-dark-text font-sans p-4 sm:p-12">
+      <div className="max-w-5xl mx-auto">
         <Header />
         <main>
           <UrlInputForm
