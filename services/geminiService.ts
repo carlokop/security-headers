@@ -61,20 +61,3 @@ Retourneer een enkel JSON-object dat strikt voldoet aan het opgegeven schema. Di
         throw new Error('De analyse via de AI-service is mislukt.');
     }
 };
-
-export const getExplanationForHeader = async (header: string, value: string | null): Promise<string> => {
-  const prompt = `Explain the security header "${header}" and its purpose. ${
-    value ? `The current value is "${value}". Briefly comment on this value.` : 'This header is currently not set.'
-  } Keep the explanation concise and easy for a non-expert to understand. Explain the risks if it's misconfigured or missing.`;
-
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-    });
-    return response.text;
-  } catch (error) {
-    console.error('Error fetching explanation from Gemini API:', error);
-    return 'Kon de uitleg op dit moment niet ophalen.';
-  }
-};

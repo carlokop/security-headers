@@ -4,10 +4,10 @@ import { CheckCircleIcon, XCircleIcon } from './icons';
 
 interface ResultsDisplayProps {
   result: AnalysisResult;
-  onExplainHeader: (header: string, value: string | null) => void;
+  onFocusHeader: (header: string) => void;
 }
 
-const ResultRow: React.FC<{ headerResult: HeaderResult; onExplainHeader: (header: string, value: string | null) => void; }> = ({ headerResult, onExplainHeader }) => {
+const ResultRow: React.FC<{ headerResult: HeaderResult; onFocusHeader: (header: string) => void; }> = ({ headerResult, onFocusHeader }) => {
   const { header, value, present } = headerResult;
 
   return (
@@ -24,7 +24,7 @@ const ResultRow: React.FC<{ headerResult: HeaderResult; onExplainHeader: (header
       {/* Column 3: Button */}
       <div className="justify-self-start md:justify-self-end">
         <button
-          onClick={() => onExplainHeader(header, value)}
+          onClick={() => onFocusHeader(header)}
           className="px-4 py-1.5 text-sm font-medium rounded-md text-white bg-brand-primary hover:bg-brand-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-card focus:ring-brand-secondary transition-colors"
         >
           Uitleg
@@ -34,7 +34,7 @@ const ResultRow: React.FC<{ headerResult: HeaderResult; onExplainHeader: (header
   );
 };
 
-export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onExplainHeader }) => {
+export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onFocusHeader }) => {
   if (result.error) {
     return (
       <div className="mt-8 bg-dark-card rounded-lg shadow-lg p-6 text-center text-red-400">
@@ -57,7 +57,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onExplai
           <ResultRow 
             key={headerResult.header} 
             headerResult={headerResult} 
-            onExplainHeader={onExplainHeader}
+            onFocusHeader={onFocusHeader}
           />
         ))}
       </div>

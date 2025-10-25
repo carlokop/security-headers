@@ -2,22 +2,17 @@ import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { UrlInputForm } from './components/UrlInputForm';
 import { ResultsDisplay } from './components/ResultsDisplay';
-import { ExplanationModal } from './components/ExplanationModal';
-import { getExplanationForHeader, analyzeUrlHeaders } from './services/geminiService';
+import { analyzeUrlHeaders } from './services/geminiService';
 import { AnalysisResult } from './types';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { SeoContent } from './components/SeoContent';
 
 function App() {
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [headerToFocus, setHeaderToFocus] = useState<string | null>(null);
 
-  const [explanationModal, setExplanationModal] = useState({
-    isOpen: false,
-    header: '',
-    value: null as string | null,
-    text: '',
-    isLoading: false,
-  });
 
   const handleAnalyze = async () => {
     if (!url) return;
@@ -46,24 +41,15 @@ function App() {
     }
   };
 
-  const handleExplainHeader = async (header: string, value: string | null) => {
-    setExplanationModal({ isOpen: true, header, value, text: '', isLoading: true });
-    try {
-      const explanation = await getExplanationForHeader(header, value);
-      setExplanationModal(prev => ({ ...prev, text: explanation, isLoading: false }));
-    } catch (error) {
-      setExplanationModal(prev => ({ ...prev, text: 'Kon de uitleg niet ophalen.', isLoading: false }));
-    }
+  const handleFocusHeader = (header: string) => {
+    setHeaderToFocus(header);
   };
-
-  const closeExplanationModal = () => {
-    setExplanationModal({ isOpen: false, header: '', value: null, text: '', isLoading: false });
-  }
 
   return (
     <div className="bg-dark-bg min-h-screen text-dark-text font-sans p-4 sm:p-12">
       <div className="max-w-5xl mx-auto">
         <Header />
+        <LanguageSwitcher />
         <main>
           <UrlInputForm
             url={url}
@@ -74,20 +60,15 @@ function App() {
           {analysisResult && (
             <ResultsDisplay 
               result={analysisResult} 
-              onExplainHeader={handleExplainHeader}
+              onFocusHeader={handleFocusHeader}
             />
           )}
         </main>
-      </div>
-
-      {explanationModal.isOpen && (
-        <ExplanationModal
-          header={explanationModal.header}
-          text={explanationModal.text}
-          isLoading={explanationModal.isLoading}
-          onClose={closeExplanationModal}
+        <SeoContent 
+          headerToFocus={headerToFocus}
+          setHeaderToFocus={setHeaderToFocus}
         />
-      )}
+      </div>
     </div>
   );
 }
