@@ -10,6 +10,10 @@ export const HEADERS_TO_CHECK = [
 
 export const translations = {
   nl: {
+    "meta": {
+      "title": "Security Header Analyse | Gratis Website Veiligheidsscan",
+      "description": "Controleer de HTTP security headers van uw website met onze gratis tool. Analyseer CSP, HSTS, en meer om kwetsbaarheden te vinden en uw site te beveiligen."
+    },
     "header": {
       "title": "Security Header Analyse",
       "subtitle": "Controleer de beveiliging van elke website"
@@ -100,6 +104,10 @@ export const translations = {
     }
   },
   en: {
+    "meta": {
+      "title": "Security Header Analysis | Free Website Security Scan",
+      "description": "Check your website's HTTP security headers with our free tool. Analyze CSP, HSTS, and more to find vulnerabilities and secure your site."
+    },
     "header": {
       "title": "Security Header Analysis",
       "subtitle": "Check the security of any website"
@@ -190,6 +198,10 @@ export const translations = {
     }
   },
   de: {
+    "meta": {
+      "title": "Sicherheitsheader-Analyse | Kostenloser Website-Sicherheits-Scan",
+      "description": "Überprüfen Sie die HTTP-Sicherheitsheader Ihrer Website mit unserem kostenlosen Tool. Analysieren Sie CSP, HSTS und mehr, um Schwachstellen zu finden und Ihre Website zu sichern."
+    },
     "header": {
       "title": "Analyse der Sicherheitsheader",
       "subtitle": "Überprüfen Sie die Sicherheit jeder Website"
@@ -280,6 +292,10 @@ export const translations = {
     }
   },
   fr: {
+    "meta": {
+      "title": "Analyse des En-têtes de Sécurité | Scan de Sécurité Gratuit pour Site Web",
+      "description": "Vérifiez les en-têtes de sécurité HTTP de votre site web avec notre outil gratuit. Analysez CSP, HSTS, et plus pour trouver des vulnérabilités et sécuriser votre site."
+    },
     "header": {
       "title": "Analyse des En-têtes de Sécurité",
       "subtitle": "Vérifiez la sécurité de n'importe quel site web"
@@ -370,6 +386,10 @@ export const translations = {
     }
   },
   es: {
+    "meta": {
+      "title": "Análisis de Cabeceras de Seguridad | Escaneo de Seguridad Gratuito para Sitios Web",
+      "description": "Compruebe las cabeceras de seguridad HTTP de su sitio web con nuestra herramienta gratuita. Analice CSP, HSTS y más para encontrar vulnerabilidades y proteger su sitio."
+    },
     "header": {
       "title": "Análisis de Cabeceras de Seguridad",
       "subtitle": "Compruebe la seguridad de cualquier sitio web"
