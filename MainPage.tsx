@@ -10,6 +10,13 @@ import { SeoContent } from './components/SeoContent';
 import { useTranslations } from './hooks/useTranslations';
 import { LoadingOverlay } from './components/LoadingOverlay';
 
+// Add type definition for window.dataLayer for TypeScript
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
+
 interface MainPageProps {
   lang: 'nl' | 'en' | 'de' | 'fr' | 'es';
 }
@@ -43,6 +50,18 @@ function MainPage({ lang }: MainPageProps) {
 
   const handleAnalyze = async () => {
     if (!url) return;
+    
+    const startTime = performance.now();
+    const analysisId = crypto.randomUUID();
+
+    // Push to dataLayer for analytics
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'analyse_start',
+      url: url,
+      analysis_id: analysisId,
+    });
+
     setIsLoading(true);
     setAnalysisResult(null);
 
@@ -50,6 +69,22 @@ function MainPage({ lang }: MainPageProps) {
       const formattedUrl = url.startsWith('http') ? url : `https://${url}`;
       const headerResults = await analyzeUrlHeaders(formattedUrl);
       
+      const endTime = performance.now();
+      const duration = Math.round(endTime - startTime);
+
+      const resultsForDataLayer = headerResults.reduce((acc, current) => {
+          acc[current.header] = current.value ?? '';
+          return acc;
+      }, {} as Record<string, string>);
+
+      window.dataLayer.push({
+          event: 'analyse_finish',
+          url: formattedUrl,
+          tijd: duration,
+          result: resultsForDataLayer,
+          analysis_id: analysisId,
+      });
+
       setAnalysisResult({
         url: formattedUrl,
         headers: headerResults,
