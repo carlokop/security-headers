@@ -8,6 +8,7 @@ import { AnalysisResult } from './types';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { SeoContent } from './components/SeoContent';
 import { useTranslations } from './hooks/useTranslations';
+import { LoadingOverlay } from './components/LoadingOverlay';
 
 interface MainPageProps {
   lang: 'nl' | 'en' | 'de' | 'fr' | 'es';
@@ -74,6 +75,7 @@ function MainPage({ lang }: MainPageProps) {
 
   return (
     <div className="bg-dark-bg min-h-screen text-dark-text font-sans p-4 sm:p-12">
+      <LoadingOverlay isLoading={isLoading} />
       <div className="max-w-5xl mx-auto">
         {/* FIX: Pass `tString` to components that expect a translation function returning only a string. */}
         <Header t={tString} />
