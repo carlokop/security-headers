@@ -3,10 +3,10 @@ import { DutchFlag, UKFlag, GermanFlag, FrenchFlag, SpanishFlag } from './flags'
 
 const languages = [
   { code: 'nl', name: 'Nederlands', FlagComponent: DutchFlag, href: '/' },
-  { code: 'en', name: 'English', FlagComponent: UKFlag, href: '/en' },
+  { code: 'en', name: 'English', FlagComponent: UKFlag, href: '/eng' },
   { code: 'de', name: 'Deutsch', FlagComponent: GermanFlag, href: '/de' },
   { code: 'fr', name: 'Français', FlagComponent: FrenchFlag, href: '/fr' },
-  { code: 'es', name: 'Español', FlagComponent: SpanishFlag, href: '/es' },
+  { code: 'es', name: 'Español', FlagComponent: SpanishFlag, href: '/sp' },
 ];
 
 export const LanguageSwitcher: React.FC = () => {

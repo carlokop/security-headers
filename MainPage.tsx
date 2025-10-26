@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { UrlInputForm } from './components/UrlInputForm';
 import { ResultsDisplay } from './components/ResultsDisplay';
@@ -19,6 +19,15 @@ function MainPage({ lang }: MainPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [headerToFocus, setHeaderToFocus] = useState<string | null>(null);
+
+  // FIX: Add a useEffect hook to reset the component's state whenever the `lang` prop changes.
+  // This replaces the behavior of remounting the component via a `key` prop, which was causing TypeScript errors in App.tsx.
+  useEffect(() => {
+    setUrl('');
+    setIsLoading(false);
+    setAnalysisResult(null);
+    setHeaderToFocus(null);
+  }, [lang]);
 
   // FIX: Create a wrapper for the translation function that ensures a string is returned.
   // The original `t` function returns `string | string[]`, which caused type errors where a `string` was strictly expected.
