@@ -42,7 +42,11 @@ Return a single JSON object that strictly adheres to the provided schema.`;
             },
         });
 
-        const jsonStr = response.text.trim();
+        const text = response.text;
+        if (!text) {
+          throw new Error("The AI service returned an empty response text.");
+        }
+        const jsonStr = text.trim();
         const parsedJson = JSON.parse(jsonStr) as { [key: string]: { present: boolean; value?: string } };
 
         const finalResults: HeaderResult[] = HEADERS_TO_CHECK.map(headerName => {
