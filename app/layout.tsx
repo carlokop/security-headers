@@ -29,22 +29,18 @@ export const metadata: Metadata = (() => {
     es: 'es-ES',
   };
 
-  const alternates: Metadata['alternates'] = {
-    canonical: new URL(langToPathMap[lang], baseUrl).href,
-    languages: {},
-  };
-
+  const languages: { [key: string]: string } = {};
   Object.keys(langToPathMap).forEach(langCode => {
     const langLocale = langToLocaleMap[langCode];
     const url = new URL(langToPathMap[langCode], baseUrl).href;
-    if (alternates.languages) {
-      alternates.languages[langLocale] = url;
-    }
+    languages[langLocale] = url;
   });
+  languages['x-default'] = new URL(langToPathMap['nl'], baseUrl).href;
 
-  if (alternates.languages) {
-      alternates.languages['x-default'] = new URL(langToPathMap['nl'], baseUrl).href;
-  }
+  const alternates: Metadata['alternates'] = {
+    canonical: new URL(langToPathMap[lang], baseUrl).href,
+    languages: languages,
+  };
 
   return {
     title,
