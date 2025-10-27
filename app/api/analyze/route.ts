@@ -27,6 +27,9 @@ export async function POST(request: Request) {
 3.  **REPORT EVERYTHING:** Report the status of EVERY header in the list: ${HEADERS_TO_CHECK.join(', ')}. ALSO report the presence of obsolete headers like 'X-XSS-Protection' if they are present in the response.
 4.  **LIVE FETCH:** Perform a live, real-time fetch. Do not use cached data.
 
+**Error Handling:**
+- If you are completely unable to access or fetch the URL, you MUST respond with a valid JSON object according to the schema where every header's "present" field is set to \`false\`, and you include a descriptive message in the optional "error" field.
+
 Return a single JSON object that strictly adheres to the provided schema.`;
 
         const properties = HEADERS_TO_CHECK.reduce((acc, header) => {
@@ -40,6 +43,11 @@ Return a single JSON object that strictly adheres to the provided schema.`;
             };
             return acc;
         }, {} as { [key: string]: any });
+        
+        properties['error'] = {
+            type: Type.STRING,
+            description: "An error message if the URL could not be fetched or analyzed."
+        };
 
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-pro',
@@ -60,7 +68,11 @@ Return a single JSON object that strictly adheres to the provided schema.`;
           throw new Error("The AI service returned an empty response text.");
         }
         const jsonStr = text.trim();
-        const parsedJson = JSON.parse(jsonStr) as { [key: string]: { present: boolean; value?: string } };
+        const parsedJson = JSON.parse(jsonStr) as { [key: string]: { present: boolean; value?: string } } & { error?: string };
+        
+        if (parsedJson.error) {
+            throw new Error(`The AI service reported an error: ${parsedJson.error}`);
+        }
 
         const finalResults: HeaderResult[] = HEADERS_TO_CHECK.map(headerName => {
             const result = parsedJson[headerName];
