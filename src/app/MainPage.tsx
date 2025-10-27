@@ -104,7 +104,7 @@ function MainPage({ lang }: MainPageProps) {
   };
 
   return (
-    <div className="min-h-screen p-4 sm:p-12">
+    <div className="bg-dark-bg min-h-screen p-4 sm:p-12">
       <LoadingOverlay isLoading={isLoading} />
       <div className="max-w-5xl mx-auto">
         <Header t={tString} />

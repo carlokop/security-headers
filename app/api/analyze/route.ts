@@ -3,9 +3,14 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { HEADERS_TO_CHECK } from '@/constants';
 import { HeaderResult } from '@/types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export async function POST(request: Request) {
+    if (!process.env.API_KEY) {
+        console.error('API_KEY environment variable is not set.');
+        return NextResponse.json({ error: 'Server configuration error: API key is missing.' }, { status: 500 });
+    }
+    
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
     try {
         const body = await request.json();
         const { url } = body;
@@ -37,7 +42,7 @@ Return a single JSON object that strictly adheres to the provided schema.`;
         }, {} as { [key: string]: any });
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-pro',
+            model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
                 temperature: 0,

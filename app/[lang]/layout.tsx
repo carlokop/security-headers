@@ -1,3 +1,5 @@
+// FIX: Import React to resolve 'Cannot find namespace React' error for the React.ReactNode type.
+import React from 'react';
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { translations } from '@/constants';
