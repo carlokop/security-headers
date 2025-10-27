@@ -23,10 +23,7 @@ const langToPathMap: Record<LangCode, string> = {
   es: '/es',
 };
 
-export async function generateStaticParams() {
-  // Exclude 'nl' as it is now handled by the root page.
-  return Object.keys(langToPathMap).filter(lang => lang !== 'nl').map((lang) => ({ lang }));
-}
+// generateStaticParams removed for server-side rendering
 
 type Props = {
   params: { lang: LangCode };
