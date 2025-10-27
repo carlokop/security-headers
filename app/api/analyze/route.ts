@@ -42,7 +42,7 @@ Return a single JSON object that strictly adheres to the provided schema.`;
         }, {} as { [key: string]: any });
 
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-pro',
             contents: prompt,
             config: {
                 temperature: 0,
