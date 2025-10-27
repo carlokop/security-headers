@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { UrlInputForm } from '@/components/UrlInputForm';
 import { ResultsDisplay } from '@/components/ResultsDisplay';
-import { AnalysisResult, HeaderResult } from '@/types';
+import { AnalysisResult } from '@/types';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { SeoContent } from '@/components/SeoContent';
 import { useTranslations } from '@/hooks/useTranslations';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
+import { analyzeUrlHeaders } from '@/services/geminiService';
 
 declare global {
   interface Window {
@@ -61,20 +62,8 @@ function MainPage({ lang }: MainPageProps) {
     try {
       const formattedUrl = url.startsWith('http') ? url : `https://${url}`;
       
-      const response = await fetch('/api/analyze', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ url: formattedUrl }),
-      });
-
-      if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'API request failed');
-      }
-
-      const headerResults: HeaderResult[] = await response.json();
+      // Call the geminiService directly from the client
+      const headerResults = await analyzeUrlHeaders(formattedUrl);
       
       const endTime = performance.now();
       const duration = Math.round(endTime - startTime);

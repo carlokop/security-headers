@@ -1,55 +1,44 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { translations } from '@/constants';
-import '../globals.css';
+import './globals.css';
 
-type LangCode = 'nl' | 'en' | 'de' | 'fr' | 'es';
-type LocaleCode = 'nl-NL' | 'en-US' | 'de-DE' | 'fr-FR' | 'es-ES';
+const lang = 'nl';
+const locale = 'nl-NL';
 
-const langToLocaleMap: Record<LangCode, LocaleCode> = {
-  nl: 'nl-NL',
-  en: 'en-US',
-  de: 'de-DE',
-  fr: 'fr-FR',
-  es: 'es-ES',
-};
-
-// Updated paths for static export compatibility
-const langToPathMap: Record<LangCode, string> = {
-  nl: '/',
-  en: '/en',
-  de: '/de',
-  fr: '/fr',
-  es: '/es',
-};
-
-export async function generateStaticParams() {
-  // Exclude 'nl' as it is now handled by the root page.
-  return Object.keys(langToPathMap).filter(lang => lang !== 'nl').map((lang) => ({ lang }));
-}
-
-type Props = {
-  params: { lang: LangCode };
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const lang = params.lang || 'en'; // Default to 'en' if something goes wrong
+export const metadata: Metadata = (() => {
   const metaTranslations = (translations[lang] as any)?.meta;
   const title = metaTranslations?.title || 'Security Header Analyser';
   const description = metaTranslations?.description || 'An application to analyze the security headers of a website.';
   
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
+  const langToPathMap: Record<string, string> = {
+    nl: '/',
+    en: '/en',
+    de: '/de',
+    fr: '/fr',
+    es: '/es',
+  };
+
+  const langToLocaleMap: Record<string, string> = {
+    nl: 'nl-NL',
+    en: 'en-US',
+    de: 'de-DE',
+    fr: 'fr-FR',
+    es: 'es-ES',
+  };
+
   const alternates: Metadata['alternates'] = {
     canonical: new URL(langToPathMap[lang], baseUrl).href,
     languages: {},
   };
-  
-  (Object.keys(langToPathMap) as LangCode[]).forEach(langCode => {
-    const locale = langToLocaleMap[langCode];
+
+  Object.keys(langToPathMap).forEach(langCode => {
+    const langLocale = langToLocaleMap[langCode];
     const url = new URL(langToPathMap[langCode], baseUrl).href;
     if (alternates.languages) {
-      alternates.languages[locale] = url;
+      alternates.languages[langLocale] = url;
     }
   });
 
@@ -62,16 +51,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates,
   };
-}
+})();
 
 export default function RootLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { lang: LangCode };
 }>) {
-  const locale = langToLocaleMap[params.lang];
   return (
     <html lang={locale}>
       <head>

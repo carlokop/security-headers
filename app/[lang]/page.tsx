@@ -8,7 +8,8 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-    return Object.keys(translations).map(lang => ({ lang }));
+    // Exclude 'nl' as it is now handled by the root page.
+    return Object.keys(translations).filter(lang => lang !== 'nl').map(lang => ({ lang }));
 }
 
 export default function Page({ params }: Props) {
